@@ -1,2 +1,0 @@
-# logikshub
-IT Company Website
