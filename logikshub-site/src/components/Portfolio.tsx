@@ -9,7 +9,7 @@ const projects = [
     category: "SaaS Web App",
     description:
       "A complete Gym Member Management SaaS platform with membership tracking, payment management, attendance monitoring, and a beautiful admin dashboard — built for gym owners to manage everything in one place.",
-    tags: ["React.js", "Node.js", "Prisma", "shadcn/ui"],
+    tags: ["React.js", "Node.js", "Prisma", "shadcn/ui", "PostgreSQL", "Azure CI/CD"],
     gradient: "from-indigo-500 to-blue-500",
     href: "https://gymdeskpro.in/",
     live: true,
@@ -19,7 +19,7 @@ const projects = [
     category: "Free Tools",
     description:
       "A comprehensive free online calculator tools platform featuring 100+ calculators across finance, health, math, science, and everyday use — fast, accurate, and completely free.",
-    tags: ["Next.js", "TypeScript", "shadcn/ui", "Material UI"],
+    tags: ["Next.js", "TypeScript", "shadcn/ui", "Material UI", "Vercel"],
     gradient: "from-emerald-500 to-teal-500",
     href: "https://www.calculatorsninja.com/",
     live: true,
@@ -29,38 +29,18 @@ const projects = [
     category: "Childcare Platform",
     description:
       "Australia's leading childcare search and comparison platform — helping parents find, compare, and enquire about childcare services with a built-in cost calculator and parent playbook.",
-    tags: ["React", ".NET Core Web API"],
+    tags: ["React.js", ".NET Core Web API", "TypeScript", "shadcn/ui", "SQL Server"],
     gradient: "from-purple-500 to-indigo-500",
     href: "https://www.careforkids.com.au/",
     live: true,
   },
   {
-    title: "Smart Customer Support Bot",
-    category: "AI Chatbot",
+    title: "E-Commerce Web Application",
+    category: "Web Application",
     description:
-      "Intelligent NLP chatbot with sentiment analysis, automated ticket routing, and seamless CRM integration — reducing support costs by 60%.",
-    tags: ["Python", "OpenAI", "FastAPI", "React"],
+      "A full-featured e-commerce platform with product catalog, cart management, secure checkout, and order tracking — powered by a robust API backend and modern UI.",
+    tags: ["ASP.NET Core Web API", "React.js", "shadcn/ui", "TypeScript", "Azure CI/CD"],
     gradient: "from-purple-500 to-pink-500",
-    href: null,
-    live: false,
-  },
-  {
-    title: "E-Commerce AI Analytics Hub",
-    category: "AI Analytics",
-    description:
-      "Real-time analytics dashboard with AI-powered inventory forecasting, customer behavior prediction, and automated marketing insights.",
-    tags: ["Next.js", "Python", "GCP", "BigQuery"],
-    gradient: "from-orange-500 to-red-500",
-    href: null,
-    live: false,
-  },
-  {
-    title: "FinTech Payment Gateway",
-    category: "Custom Software",
-    description:
-      "Secure payment processing solution with fraud detection AI, multi-currency support, and automated compliance monitoring.",
-    tags: ["React", "Spring Boot", "Azure", "MongoDB"],
-    gradient: "from-cyan-500 to-blue-500",
     href: null,
     live: false,
   },

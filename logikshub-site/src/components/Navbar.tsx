@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
@@ -15,14 +15,41 @@ const navLinks = [
   { name: "Contact", href: "#contact" },
 ];
 
+const servicesMenu = [
+  {
+    title: "Mobile Apps",
+    items: ["iOS", "Android", "Hybrid", "Cross Platform", "PWA"],
+  },
+  {
+    title: "Web Development",
+    items: ["Ecommerce", "CMS", "CRM", "API & Backend", "Custom Software Development"],
+  },
+  {
+    title: "Product Design",
+    items: ["UI/UX Design", "Web Design"],
+  },
+];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const servicesTimeout = useRef<NodeJS.Timeout | null>(null);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 50);
   });
+
+  const handleServicesEnter = () => {
+    if (servicesTimeout.current) clearTimeout(servicesTimeout.current);
+    setServicesOpen(true);
+  };
+
+  const handleServicesLeave = () => {
+    servicesTimeout.current = setTimeout(() => setServicesOpen(false), 200);
+  };
 
   return (
     <motion.nav
@@ -54,16 +81,76 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="relative text-sm font-medium transition-colors hover:text-[var(--color-primary)] group"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-all duration-300 group-hover:w-full" />
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.name === "Services" ? (
+                <div
+                  key={link.name}
+                  className="relative"
+                  onMouseEnter={handleServicesEnter}
+                  onMouseLeave={handleServicesLeave}
+                >
+                  <Link
+                    href={link.href}
+                    className="relative text-sm font-medium transition-colors hover:text-[var(--color-primary)] group flex items-center gap-1"
+                  >
+                    {link.name}
+                    <svg
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-all duration-300 group-hover:w-full" />
+                  </Link>
+
+                  <AnimatePresence>
+                    {servicesOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[600px] rounded-2xl p-6 shadow-xl border border-[var(--color-primary)]/10"
+                        style={{ background: "var(--nav-bg)", backdropFilter: "blur(16px)" }}
+                      >
+                        <div className="grid grid-cols-3 gap-6">
+                          {servicesMenu.map((group) => (
+                            <div key={group.title}>
+                              <h4 className="text-sm font-semibold gradient-text mb-3">{group.title}</h4>
+                              <ul className="space-y-2">
+                                {group.items.map((item) => (
+                                  <li key={item}>
+                                    <Link
+                                      href="#services"
+                                      onClick={() => setServicesOpen(false)}
+                                      className="text-sm transition-colors hover:text-[var(--color-primary)]"
+                                      style={{ color: "var(--muted)" }}
+                                    >
+                                      {item}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="relative text-sm font-medium transition-colors hover:text-[var(--color-primary)] group"
+                >
+                  {link.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] transition-all duration-300 group-hover:w-full" />
+                </Link>
+              )
+            )}
             <ThemeToggle />
             <Link
               href="#contact"
@@ -110,16 +197,65 @@ export default function Navbar() {
           className="md:hidden overflow-hidden"
         >
           <div className="pt-4 pb-2 flex flex-col gap-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-primary)]/10 transition-colors"
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.name === "Services" ? (
+                <div key={link.name}>
+                  <button
+                    onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                    className="w-full px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-primary)]/10 transition-colors flex items-center justify-between"
+                  >
+                    {link.name}
+                    <svg
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileServicesOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <AnimatePresence>
+                    {mobileServicesOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pl-4 pb-2 space-y-3">
+                          {servicesMenu.map((group) => (
+                            <div key={group.title}>
+                              <p className="px-4 py-1 text-xs font-semibold gradient-text uppercase tracking-wider">{group.title}</p>
+                              {group.items.map((item) => (
+                                <Link
+                                  key={item}
+                                  href="#services"
+                                  onClick={() => { setIsOpen(false); setMobileServicesOpen(false); }}
+                                  className="block px-4 py-1.5 text-sm hover:bg-[var(--color-primary)]/10 rounded-lg transition-colors"
+                                  style={{ color: "var(--muted)" }}
+                                >
+                                  {item}
+                                </Link>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="px-4 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-primary)]/10 transition-colors"
+                >
+                  {link.name}
+                </Link>
+              )
+            )}
             <Link
               href="#contact"
               onClick={() => setIsOpen(false)}
